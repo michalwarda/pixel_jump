@@ -9,25 +9,28 @@ class State
   create: ->
     @setUpGame()
 
-    @addCharacter()
+    @createCharacter()
+
+    @createWorld()
 
   update: ->
-    @character.body.velocity.y = 0
+    @character.isCharacterOnGround = false
 
-    if @cursors.up.isDown
-      @character.moveUp()
+    @game.physics.arcade.collide @character, @walls, @setCharacterGroundTouching
 
-    if @cursors.down.isDown
-      @character.moveDown()
+    @character.body.velocity.y = -500
 
-    if @cursors.right.isDown and @character.isCharacterOnGround()
+    if @cursors.right.isDown and @character.isCharacterOnGround
       @character.jump()
 
-    if @cursors.left.isDown and @character.isCharacterOnGround()
+    if @cursors.left.isDown and @character.isCharacterOnGround
       @character.switchGravity()
 
-  addCharacter: ->
-    @character = @game.add.sprite 220, 0, 'pixel'
+  setCharacterGroundTouching: (character) ->
+    character.isCharacterOnGround = true
+
+  createCharacter: ->
+    @character = @game.add.sprite 220, 4975, 'pixel'
     
     @characters.add @character
 
@@ -40,12 +43,24 @@ class State
     @character.body.gravity.x = -4000
     @character.anchor.setTo 0.5, 0.5
     @character.tint = 0xFF20A0
-    @character.isCharacterOnGround = @isCharacterOnGround
+    @character.isCharacterOnGround = false
     @character.isCharacterGravityInverted = @isCharacterGravityInverted
     @character.switchGravity = @switchGravity
-    @character.moveUp = @moveUp
-    @character.moveDown = @moveDown
     @character.jump = @jump
+
+    @game.camera.follow @character, Phaser.Camera.FOLLOW_LOCKON
+
+  createWorld: ->
+    @walls = @game.add.group()
+
+    @walls.enableBody = true
+
+    leftWall = @game.add.sprite 0, 0, 'pixel', 0, @walls
+    rightWall = @game.add.sprite 490, 0, 'pixel', 0, @walls
+    leftWall.scale.setTo 1, 100
+    rightWall.scale.setTo 1, 100
+
+    @walls.setAll('body.immovable', true)
 
   isCharacterOnGround: =>
     @character.body.onWall()
@@ -56,12 +71,6 @@ class State
   switchGravity: =>
     @character.body.gravity.x = -@character.body.gravity.x
 
-  moveUp: =>
-    @character.body.velocity.y = -500
-
-  moveDown: =>
-    @character.body.velocity.y = 500
-
   jump: =>
     if @isCharacterGravityInverted()
       @character.body.velocity.x = -1000
@@ -70,6 +79,7 @@ class State
       @character.body.velocity.x = 1000
 
   setUpGame: ->
+    @game.world.setBounds 0, 0, 540, 5000
     @game.time.desiredFps = 60
     @game.physics.startSystem Phaser.Physics.ARCADE
     @cursors = @game.input.keyboard.createCursorKeys()
