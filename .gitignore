@@ -9,5 +9,4 @@ coverage
 build/Release
 node_modules
 .lock-wscript
-build
 assets/vendor
