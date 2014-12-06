@@ -1,5 +1,27 @@
 {
-  "name": "phaser-coffee-boilerplate",
+  "name": "PixelJump",
+  "version": "0.1",
+  "description": "PixelJump",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "~4.9.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michalwarda/pixel_jump"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "PixelJump"
+  ],
+  "license": "MIT",
   "devDependencies": {
     "browserify": "^4.1.9",
     "coffeeify": "^0.6.0",
