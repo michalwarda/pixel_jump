@@ -1,6 +1,6 @@
 {
   "name": "PixelJump",
-  "version": "0.1",
+  "version": "0.1.1",
   "description": "PixelJump",
   "main": "index.js",
   "scripts": {
